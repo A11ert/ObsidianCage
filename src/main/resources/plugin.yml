@@ -1,0 +1,5 @@
+name: ObsidianCage
+version: '1.0.0'
+main: yernaz.obsidianCage.ObsidianCage
+api-version: '1.21'
+authors: [ Yernaz ]
