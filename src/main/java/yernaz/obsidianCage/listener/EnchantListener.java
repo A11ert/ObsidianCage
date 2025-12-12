@@ -8,6 +8,9 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
+import org.bukkit.event.entity.PlayerDeathEvent;
+import org.bukkit.event.player.PlayerKickEvent;
+import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.inventory.ItemStack;
 import yernaz.obsidianCage.enchant.ObsidianCageEnchant;
 
@@ -22,17 +25,32 @@ public class EnchantListener implements Listener {
         this.obsCageEnchant=obsCageEnchant;
     }
 
+//    @EventHandler
+//    public void onHit(EntityDamageByEntityEvent event) {
+//
+//        if (!(event.getDamager() instanceof Player damager)) return;
+//        ItemStack weapon = damager.getInventory().getItemInMainHand();
+//        if(weapon.getType()!= Material.DIAMOND_SWORD)return;
+//        Entity target = event.getEntity();
+//        if (!(target instanceof LivingEntity victim)) return;
+//
+//        obsCageEnchant.apply(damager, victim);
+//
+//    }
+
     @EventHandler
-    public void onHit(EntityDamageByEntityEvent event) {
+    public void onQuit(PlayerQuitEvent e) {
+        obsCageEnchant.clearCage(e.getPlayer().getUniqueId());
+    }
 
-        if (!(event.getDamager() instanceof Player damager)) return;
-        ItemStack weapon = damager.getInventory().getItemInMainHand();
-        if(weapon.getType()!= Material.DIAMOND_SWORD)return;
-        Entity target = event.getEntity();
-        if (!(target instanceof LivingEntity victim)) return;
+    @EventHandler
+    public void onKick(PlayerKickEvent e) {
+        obsCageEnchant.clearCage(e.getPlayer().getUniqueId());
+    }
 
-        obsCageEnchant.apply(damager, victim);
-
+    @EventHandler
+    public void onDeath(PlayerDeathEvent e) {
+        obsCageEnchant.clearCage(e.getPlayer().getUniqueId());
     }
 
 }

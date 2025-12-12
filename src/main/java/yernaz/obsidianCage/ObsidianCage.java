@@ -1,30 +1,37 @@
 package yernaz.obsidianCage;
 
-import org.bukkit.Bukkit;
-import org.bukkit.event.Listener;
 import org.bukkit.plugin.java.JavaPlugin;
+import yernaz.obsidianCage.comands.TrapCommand;
 import yernaz.obsidianCage.enchant.ObsidianCageEnchant;
 import yernaz.obsidianCage.listener.EnchantListener;
+import yernaz.obsidianCage.listener.TrapUserListener;
+
+import static org.bukkit.Bukkit.getServer;
 
 public final class ObsidianCage extends JavaPlugin {
 
     private static ObsidianCage instance;
 
+    private ObsidianCageEnchant cageEnchant;
+
     @Override
     public void onEnable() {
         instance = this;
-        getLogger().info("ObsidianCage plugin enabled!");
-        // Plugin startup logic
-        ObsidianCageEnchant cageEnchant = new ObsidianCageEnchant();
-        EnchantListener enchantListener = new EnchantListener(cageEnchant);
+        getCommand("trap").setExecutor(new TrapCommand(this));
+        cageEnchant = new ObsidianCageEnchant();
 
-        Bukkit.getPluginManager().registerEvents(enchantListener, this);
+        getServer().getPluginManager().registerEvents(
+                new EnchantListener(cageEnchant),
+                this
+        );
+
+        getServer().getPluginManager().registerEvents(
+                new TrapUserListener(this, cageEnchant),
+                this
+        );
     }
 
-    @Override
-    public void onDisable() {
-        // Plugin shutdown logic
-    }
+
 
     public static ObsidianCage getInstance() {
         return instance;
